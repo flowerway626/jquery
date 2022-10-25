@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>card</title>
+  <style>
+    .card {
+      width: 50px;
+      height: 90px;
+      position: relative;
+      float: left;
+      margin: 10px;
+      transition: 1s;
+      /* 設定子元素在 3D 空間內 */
+      transform-style: preserve-3d;
+    }
+
+    .card-front {
+      width: 100%;
+      height: 100%;
+      background-image: url('./撲克牌/1H.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      /* 設定隱藏背面 */
+      backface-visibility: hidden;
+    }
+
+    .card-back {
+      width: 100%;
+      height: 100%;
+      background-image: url('./撲克牌/Red_back.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      transform: rotateY(180deg);
+      /* 設定隱藏背面 */
+      backface-visibility: hidden;
+    }
+
+    .card-close {
+      transform: rotateY(180deg);
+    }
+
+    #game {
+      width: 300px;
+      margin: auto;
+    }
+
+    ul {
+      padding: 0;
+      width: 30%;
+      margin: auto;
+    }
+
+    li {
+      width: 30%;
+      display: inline-block;
+      list-style: none;
+    }
+
+    li:nth-child(3) {
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+  <ul>
+    <li><input type="button" id="btnStart" value="START"></li>
+    <li>
+      <p>第 <span id="text-level"></span> 關</p>
+    </li>
+    <li>
+      <p>倒數 <span id="text-time"></span> 秒</p>
+    </li>
+  </ul>
+  <div id="game"></div>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js'
+    integrity='sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=='
+    crossorigin='anonymous'></script>
+  <script>
+    let timer = 0
+    // 等級
+    let level = 1
+    // 累積時間
+    let countup = 0
+    // 倒數計時
+    let countdown = 20
+    const hightime = localStorage.cardgame ? JSON.parse(localStorage.cardgame) : { name: 'best', level: 1, time: 0 }
+    localStorage.cardgame = JSON.stringify(hightime)
+    $('#text-level').text(level)
+
+    function cardChange() {
+      for (let i = 0; i < 8 * level; i++) {
+        // 用迴圈產生卡片
+        $('#game').append(`
+          <div class="card card-close">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        `)
+      }
+      for (let i = 0; i < $('.card').length; i++) {
+        // 決定數字
+        const num = i % ($('.card').length / 2) + 1
+        $('.card').eq(i).find('.card-front').css('background-image', `url('./撲克牌/${num}H.jpg')`)
+        $('.card').eq(i).attr('data-num', num)
+
+        // 打散卡片
+        const target = Math.round(Math.random() * ($('.card').length - 1))
+        // 放進迴圈後面
+        $('.card').eq(target).insertAfter($('.card').eq(i))
+      }
+    }
+
+    function cardempty() {
+      $('#btnStart').attr('disabled', false)
+      $('.card').css('opacity', '')
+      $('.card').remove()
+      $('.card-colse').remove()
+      $('.card').removeClass('card-ok')
+    }
+
+    $('#btnStart').click(function () {
+      cardChange()
+      $(this).attr('disabled', true)
+      // 計算秒數
+      timer = setInterval(() => {
+        countdown--
+        countup++
+        $('#text-time').text(countdown)
+        // 當時間截止時
+        if (countdown === 0) {
+          clearInterval(timer)
+          // 重洗牌
+          cardempty()
+          // i = 目前level
+          for (let i = 1; i <= level; i++) {
+            // 當目前 level 不等於 最高紀錄的 level
+            if (i > hightime.level) {
+              // 再判斷累積時間小於最高 20 秒時
+              if (hightime.time === 0) {
+                Swal.fire({
+                  icon: 'info',
+                  title: '最高分！名流千史吧！',
+                  inputPlaceholder: '輸入名稱',
+                  input: 'text',
+                  inputAttributes: {
+                    required: true
+                  },
+                  validationMessage: '名稱必填'
+                }).then(result => {
+                  hightime.name = result.value
+                  hightime.level = level
+                  hightime.time = countup
+                  localStorage.cardgame = JSON.stringify(hightime)
+                })
+
+              } else if (countup < hightime.time) {
+                Swal.fire({
+                  icon: 'info',
+                  title: '最高分！名流千史吧！',
+                  inputPlaceholder: '輸入名稱',
+                  input: 'text',
+                  inputAttributes: {
+                    required: true
+                  },
+                  validationMessage: '名稱必填'
+                }).then(result => {
+                  hightime.name = result.value
+                  hightime.level = level
+                  hightime.time = countup
+                  localStorage.cardgame = JSON.stringify(hightime)
+                })
+              } else {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Time is up！',
+                  html: `超時囉QAQ`,
+                })
+              }
+            }
+
+          }
+        }
+
+
+      }, 1000)
+    })
+
+
+    $('#game').on('click', '.card', function () {
+      // 翻咖 0 張或 1 張時 (最多一次翻兩張，且翻的這張牌需為翻開過)
+      if ($('.card:not(.card-close)').length < 2 &&
+        $(this).hasClass('card-close') &&
+        !$(this).hasClass('card-ok')) {
+        // 移除該卡片的 card-close
+        $(this).removeClass('card-close')
+      }
+      // 如果翻了兩張
+      if ($('.card:not(.card-close)').length === 2) {
+        // 如果翻開兩張卡片一樣(data-num相同時)
+        if ($('.card:not(.card-close)').eq(0).attr('data-num') === $('.card:not(.card-close)').eq(1).attr('data-num')) {
+          // 用.card-ok 標記已完成
+          $('.card:not(.card-close)').addClass('card-ok')
+          // 動畫淡出
+          $('.card:not(.card-close)').fadeTo(1000, 0)
+        }
+        // 不管數字是否一樣都會將卡片翻過來
+        // 延遲設定的時間後才執行
+        setTimeout(() => {
+          $('.card:not(.card-close)').addClass('card-close')
+
+          // 配對成功的卡片數量與所有卡片數量相同
+          if ($('.card-ok').length === $('.card').length) {
+            clearInterval(timer)
+            Swal.fire({
+              icon: 'success',
+              title: 'Congratulations',
+              html: `花費時間 ${countup} 秒 </br>` + '<b></b>' + ` 秒後進入下一關`,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: () => {
+                const b = Swal.getHtmlContainer().querySelector('b')
+                Swal.showLoading()
+                nextTimer = setInterval(() => {
+                  b.textContent = Math.ceil((Swal.getTimerLeft() / 1000))
+                }, 100);
+              },
+              willClose: () => {
+                clearInterval(nextTimer)
+                cardempty()
+                level++
+                countdown += 10
+                $('#text-level').text(level)
+                // $('#text-time').text(countup)
+              }
+            })
+          }
+
+          // 翻開時間
+        }, 500)
+      }
+    })
+  </script>
+</body>
+
+</html>

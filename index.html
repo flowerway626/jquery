@@ -5,34 +5,55 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>card</title>
   <style>
-    body {
-      margin: 0;
-      background: url('./images/sky.png') no-repeat center center/100%;
-      background-attachment: fixed;
+    * {
+      transition: 0.5s;
+    }
 
+    /* 字體 */
+    @font-face {
+      font-family: 'cwTeXYen';
+      font-style: normal;
+      font-weight: 500;
+      src: url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.eot);
+      src: url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.eot?#iefix) format('embedded-opentype'),
+        url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff2) format('woff2'),
+        url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff) format('woff'),
+        url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.ttf) format('truetype');
+    }
+
+    body {
+      font-family: 'cwTeXYen', sans-serif;
+      font-weight: 500;
+      margin: 0;
+      background-image: url('./images/totoro.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
     }
 
     #area {
-      width: 700px;
-      height: 500px;
-      background: rgba(153, 153, 153, 0.7);
+      width: 600px;
+      height: 450px;
+      background: rgba(153, 153, 153, 0.5);
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      border-radius: 10px;
+      border-radius: 30px;
     }
 
     #game {
       width: 500px;
-      margin: auto;
+      margin: 50px auto 0;
     }
 
     .card {
       width: 100px;
-      height: 140px;
+      height: 120px;
       position: relative;
       float: left;
       margin: 10px;
@@ -44,7 +65,7 @@
     .card-front {
       width: 100%;
       height: 100%;
-      background-image: url('./images/sky1.jpg');
+      background-image: url('./images/totoro1.jpg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -56,7 +77,7 @@
     .card-back {
       width: 100%;
       height: 100%;
-      background-image: url('./images/sky_back.jpg');
+      background-image: url('./images/totoro_back.jpg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -70,39 +91,104 @@
       transform: rotateY(180deg);
     }
 
-    ul {
-      padding: 0;
-      width: 50%;
-      margin: auto;
+    p:not(#text-theme, #text-title) {
+      width: 20%;
+      font-size: 20px;
+      line-height: 50px;
+      margin: 0 100px 0 0;
+      text-align: right;
+      font-size: 1.5rem;
+      float: right;
       color: #fff;
     }
 
-    li {
-      width: 30%;
-      display: inline-block;
-      list-style: none;
+    p:first-child:not(#text-theme, #text-title) {
+      float: left;
+      text-align: left;
+      margin: 0 0 0 100px;
     }
 
-    li:nth-child(3) {
-      text-align: right;
+    /* 開始鍵 */
+    #btnStart {
+      padding: 0.5rem;
+      border-radius: 10px;
+      font-size: 1.5rem;
+      background: #333;
+      color: #fff;
+      position: absolute;
+      left: 50%;
+      top: 85%;
+      transform: translate(-50%, -50%);
+    }
+
+    #btnStart:hover {
+      background: #999;
+      color: #000;
+    }
+
+    .radio {
+      display: none;
+    }
+
+    #bg {
+      width: 100%;
+      position: absolute;
+      text-align: center;
+      margin: 0 auto 0;
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    #text-title {
+      color: #fff;
+      margin: 20px 0;
+      font-size: 2.5rem;
+    }
+
+    #text-theme {
+      color: #fff;
+      margin: 0;
+    }
+
+    input:hover,
+    label:hover {
+      cursor: pointer;
+    }
+
+    #bg img {
+      width: 230px;
+      height: 80px;
+      margin: 10px;
+    }
+
+    #bg img:hover {
+      box-shadow: 0 0 10px #eee;
     }
   </style>
 </head>
 
 <body>
   <div id="area">
-    <ul>
-      <li>
-        <p>第 <span id="text-level"></span> 關</p>
-      </li>
-      <li>
-        <input type="button" id="btnStart" value="START">
-      </li>
-      <li>
-        <p>倒數 <span id="text-time"></span> 秒</p>
-      </li>
-    </ul>
+    <p>第 <span id="text-level"></span> 關</p>
+    <input type="button" id="btnStart" value="START">
+    <p>倒數 <span id="text-time"></span> 秒</p>
 
+    <div id="bg">
+      <p id="text-title">翻牌GAME</p>
+      <p id="text-theme">~ 卡牌主題 ~</p>
+      <input type="radio" class="radio" id="totoro" value="totoro" name="bgchange">
+      <label for="totoro"><img src="./images/theme_totoro.jpg"></label>
+
+      <input type="radio" class="radio" id="baron" value="baron" name="bgchange">
+      <label for="baron"><img src="./images/theme_baron.jpg"></label><br>
+
+      <input type="radio" class="radio" id="howl" value="howl" name="bgchange">
+      <label for="howl"><img src="./images/theme_howl.jpg"></label>
+
+      <input type="radio" class="radio" id="sky" value="sky" name="bgchange">
+      <label for="sky"><img src="./images/theme_sky.jpg"></label>
+    </div>
+    <!-- 卡牌召喚 -->
     <div id="game"></div>
   </div>
 
@@ -111,32 +197,51 @@
     integrity='sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=='
     crossorigin='anonymous'></script>
   <script>
+    // 卡片主題
+    let theme = ''
     let timer = 0
     // 等級
     let level = 1
     // 累積時間
     let countup = 0
     // 倒數計時
-    let countdown = 20
+    let countdown = 15
     // 儲存最高紀錄
     const hightime = localStorage.cardgame ? JSON.parse(localStorage.cardgame) : { name: 'best', level: 1, time: 0 }
     localStorage.cardgame = JSON.stringify(hightime)
     $('#text-level').text(level)
+    $('p:not(#text-theme,#text-title)').hide()
+
+    // 預設選定主題
+    $(function (e) {
+      $('.radio').eq(0).attr('checked', true)
+      $('label').eq(0).find('img').css('box-shadow', '0 0 10px #eee')
+      theme = $('.radio:checked').val()
+      // $('body').css('background-image', ` url('./images/${theme}.jpg')`)
+    })
+    // 換卡片主題
+    $('.radio').on('click', function (e) {
+      theme = e.target.value
+      $('body').css('background-image', ` url('./images/${theme}.jpg')`)
+      $('label').find('img').css('box-shadow', '')
+      $(e.target).next().find('img').css('box-shadow', '0 0 10px #eee')
+    })
 
     function cardChange() {
-      for (let i = 0; i < 8; i++) {
-        // 用迴圈產生卡片
+      // 用迴圈產生卡片
+      for (let i = 0; i < (4 + level * 4); i++) {
         $('#game').append(`
-          <div class="card card-close">
-            <div class="card-front"></div>
-            <div class="card-back"></div>
+        <div class="card card-close">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
           </div>
-        `)
+          `)
       }
       for (let i = 0; i < $('.card').length; i++) {
         // 決定兩對數字 以總卡片數的一半產生
         const num = i % ($('.card').length / 2) + 1
-        $('.card').eq(i).find('.card-front').css('background-image', `url('./images/sky${num}.jpg')`)
+        $('.card-back').eq(i).css('background-image', ` url('./images/${theme}_back.jpg')`)
+        $('.card').eq(i).find('.card-front').css('background-image', `url('./images/${theme + num}.jpg')`)
         $('.card').eq(i).attr('data-num', num)
 
         // 打散卡片
@@ -151,22 +256,31 @@
       $('#btnStart').attr('disabled', false)
       // 恢復卡牌翻轉後的透明度
       $('.card').css('opacity', '')
-      $('.card').remove()
-      $('.card-colse').remove()
+      $('.card, .card-colse').remove()
+      // $('.card-colse').remove()
       $('.card').removeClass('card-ok')
     }
 
     // 當按下開始鍵
     $('#btnStart').click(function () {
+      $(this).hide()
+      $('#area').animate({
+        width: '800px',
+        height: '600px'
+      })
+      // 主題按鈕消失
+      $('#bg').css('display', 'none')
+      $('p:not(#text-theme, #text-title)').show()
+      $('#area').css('background', 'rgba(153, 153, 153, 0.5)')
       // 呼叫洗牌
       cardChange()
-      $(this).attr('disabled', true)
+
       // 計算秒數
       timer = setInterval(() => {
-        // 本局剩餘時間--
-        countdown--
         // 累計時間++
         countup++
+        // 本局剩餘時間--
+        countdown--
         $('#text-time').text(countdown)
         // 當時間截止時
         if (countdown === 0) {
@@ -174,52 +288,31 @@
           clearInterval(timer)
           // 重置卡牌
           cardempty()
-          // i = 目前level
-          for (let i = 1; i <= level; i++) {
-            // 當目前 level 不等於 最高紀錄的 level
-            if (i > hightime.level) {
-              // 再判斷累積時間小於最高 20 秒時
-              if (hightime.time === 0) {
-                Swal.fire({
-                  icon: 'info',
-                  title: '最高分！名流千史吧！',
-                  inputPlaceholder: '輸入名稱',
-                  input: 'text',
-                  inputAttributes: {
-                    required: true
-                  },
-                  validationMessage: '名稱必填'
-                }).then(result => {
-                  hightime.name = result.value
-                  hightime.level = level
-                  hightime.time = countup
-                  localStorage.cardgame = JSON.stringify(hightime)
-                })
-
-              } else if (countup < hightime.time) {
-                Swal.fire({
-                  icon: 'info',
-                  title: '最高分！留下大名吧！',
-                  inputPlaceholder: '輸入名稱',
-                  input: 'text',
-                  inputAttributes: {
-                    required: true
-                  },
-                  validationMessage: '名稱必填'
-                }).then(result => {
-                  hightime.name = result.value
-                  hightime.level = level
-                  hightime.time = countup
-                  localStorage.cardgame = JSON.stringify(hightime)
-                })
-              } else {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Time is up！',
-                  html: `超時囉QAQ`,
-                })
-              }
-            }
+          // 當目前 level 大於 最高紀錄的 level 或 與最高紀錄同 level 且 累計時間比最高紀錄還要少
+          if (level > hightime.level || hightime.time === 0 ||
+            (level === hightime.level && countup < hightime.time)) {
+            Swal.fire({
+              icon: 'info',
+              title: '最高分！留下你的大名吧！',
+              html: `累計時間為 ${countup} 秒`,
+              inputPlaceholder: '輸入名稱',
+              input: 'text',
+              inputAttributes: {
+                required: true
+              },
+              validationMessage: '名稱必填'
+            }).then(result => {
+              hightime.name = result.value
+              hightime.level = level
+              hightime.time = countup
+              localStorage.cardgame = JSON.stringify(hightime)
+            })
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'Time is up！',
+              html: `遊戲結束QAQ<br>累計時間為 ${countup} 秒`,
+            })
           }
         }
       }, 1000)
@@ -267,15 +360,22 @@
               },
               willClose: () => {
                 clearInterval(nextTimer)
-                cardempty()
-                level++
-                countdown += 10
-                $('#text-level').text(level)
-                // $('#text-time').text(countup)
               }
+            }).then(result => {
+              cardempty()
+
+              $('#btnStart').css({ 'top': '55%', 'display': 'block' })
+              level++
+              switch (level) {
+                case 2: countdown = 25
+                  break
+                case 3: countdown = 35
+                  break
+              }
+              $('#text-level').text(level)
+              $('#text-time').text(countdown)
             })
           }
-
           // 翻開時間
         }, 500)
       }

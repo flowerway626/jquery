@@ -5,13 +5,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>card</title>
   <style>
-    * {
-      transition: 0.5s;
-    }
-
     /* 字體 */
     @font-face {
       font-family: 'cwTeXYen';
@@ -22,6 +17,10 @@
         url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff2) format('woff2'),
         url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff) format('woff'),
         url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.ttf) format('truetype');
+    }
+
+    * {
+      transition: 0.5s;
     }
 
     body {
@@ -37,8 +36,8 @@
 
     #area {
       width: 600px;
-      height: 450px;
-      background: rgba(153, 153, 153, 0.5);
+      height: 550px;
+      background: rgba(153, 153, 153, 0.4);
       position: absolute;
       left: 50%;
       top: 50%;
@@ -117,7 +116,7 @@
       color: #fff;
       position: absolute;
       left: 50%;
-      top: 85%;
+      top: 90%;
       transform: translate(-50%, -50%);
     }
 
@@ -170,29 +169,32 @@
 <body>
   <div id="area">
     <p>第 <span id="text-level"></span> 關</p>
-    <input type="button" id="btnStart" value="START">
     <p>倒數 <span id="text-time"></span> 秒</p>
+    <input type="button" id="btnStart" value="START">
 
     <div id="bg">
       <p id="text-title">翻牌GAME</p>
       <p id="text-theme">~ 卡牌主題 ~</p>
       <input type="radio" class="radio" id="totoro" value="totoro" name="bgchange">
-      <label for="totoro"><img src="./images/theme_totoro.jpg"></label>
-
       <input type="radio" class="radio" id="baron" value="baron" name="bgchange">
-      <label for="baron"><img src="./images/theme_baron.jpg"></label><br>
-
       <input type="radio" class="radio" id="howl" value="howl" name="bgchange">
-      <label for="howl"><img src="./images/theme_howl.jpg"></label>
-
       <input type="radio" class="radio" id="sky" value="sky" name="bgchange">
+      <input type="radio" class="radio" id="porco" value="porco" name="bgchange">
+      <input type="radio" class="radio" id="kazetachinu" value="kazetachinu" name="bgchange">
+
+      <label for="totoro"><img src="./images/theme_totoro.jpg"></label>
+      <label for="baron"><img src="./images/theme_baron.jpg"></label>
+      <label for="howl"><img src="./images/theme_howl.jpg"></label>
       <label for="sky"><img src="./images/theme_sky.jpg"></label>
+      <label for="porco"><img src="./images/theme_porco.jpg"></label>
+      <label for="kazetachinu"><img src="./images/theme_kazetachinu.jpg"></label>
+
     </div>
     <!-- 卡牌召喚 -->
     <div id="game"></div>
   </div>
 
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js'
     integrity='sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=='
     crossorigin='anonymous'></script>
@@ -224,7 +226,7 @@
       theme = e.target.value
       $('body').css('background-image', ` url('./images/${theme}.jpg')`)
       $('label').find('img').css('box-shadow', '')
-      $(e.target).next().find('img').css('box-shadow', '0 0 10px #eee')
+      $('label').eq($('.radio').index(this)).find('img').css('box-shadow', '0 0 10px #eee')
     })
 
     function cardChange() {
@@ -256,9 +258,8 @@
       $('#btnStart').attr('disabled', false)
       // 恢復卡牌翻轉後的透明度
       $('.card').css('opacity', '')
-      $('.card, .card-colse').remove()
-      // $('.card-colse').remove()
       $('.card').removeClass('card-ok')
+      $('.card, .card-colse').remove()
     }
 
     // 當按下開始鍵
@@ -271,7 +272,7 @@
       // 主題按鈕消失
       $('#bg').css('display', 'none')
       $('p:not(#text-theme, #text-title)').show()
-      $('#area').css('background', 'rgba(153, 153, 153, 0.5)')
+      $('#area').css('background', 'rgba(153, 153, 153, 0.4)')
       // 呼叫洗牌
       cardChange()
 
@@ -279,20 +280,20 @@
       timer = setInterval(() => {
         // 累計時間++
         countup++
-        // 本局剩餘時間--
+        // 該局剩餘時間--
         countdown--
         $('#text-time').text(countdown)
-        // 當時間截止時
+        // 當時間截止
         if (countdown === 0) {
-          // 停止計時器
           clearInterval(timer)
           // 重置卡牌
           cardempty()
           // 當目前 level 大於 最高紀錄的 level 或 與最高紀錄同 level 且 累計時間比最高紀錄還要少
-          if (level > hightime.level || hightime.time === 0 ||
+          if (level > hightime.level ||
             (level === hightime.level && countup < hightime.time)) {
             Swal.fire({
               icon: 'info',
+
               title: '最高分！留下你的大名吧！',
               html: `累計時間為 ${countup} 秒`,
               inputPlaceholder: '輸入名稱',
@@ -348,18 +349,14 @@
             Swal.fire({
               icon: 'success',
               title: 'Congratulations',
-              html: `花費時間 ${countup} 秒 </br>` + '<b></b>' + ` 秒後進入下一關`,
+              html: `累積花費 ${countup} 秒`,
               timer: 3000,
               timerProgressBar: true,
               didOpen: () => {
-                const b = Swal.getHtmlContainer().querySelector('b')
                 Swal.showLoading()
-                nextTimer = setInterval(() => {
-                  b.textContent = Math.ceil((Swal.getTimerLeft() / 1000))
-                }, 100);
               },
               willClose: () => {
-                clearInterval(nextTimer)
+                clearInterval(timer)
               }
             }).then(result => {
               cardempty()
@@ -370,6 +367,12 @@
                 case 2: countdown = 25
                   break
                 case 3: countdown = 35
+                  break
+                case 4: countdown = 45
+                  break
+                case 5:
+                  countdown = 60
+                  $('#game').css('width', '600px')
                   break
               }
               $('#text-level').text(level)

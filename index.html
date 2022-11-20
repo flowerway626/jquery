@@ -5,176 +5,41 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
   <title>card</title>
-  <style>
-    /* 字體 */
-    @font-face {
-      font-family: 'cwTeXYen';
-      font-style: normal;
-      font-weight: 500;
-      src: url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.eot);
-      src: url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.eot?#iefix) format('embedded-opentype'),
-        url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff2) format('woff2'),
-        url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff) format('woff'),
-        url(https://fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.ttf) format('truetype');
-    }
-
-    * {
-      transition: 0.5s;
-    }
-
-    body {
-      font-family: 'cwTeXYen', sans-serif;
-      font-weight: 500;
-      margin: 0;
-      background-image: url('./images/totoro.jpg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-attachment: fixed;
-    }
-
-    #area {
-      width: 600px;
-      height: 550px;
-      background: rgba(153, 153, 153, 0.4);
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 30px;
-    }
-
-    #game {
-      width: 500px;
-      margin: 50px auto 0;
-    }
-
-    .card {
-      width: 100px;
-      height: 120px;
-      position: relative;
-      float: left;
-      margin: 10px;
-      transition: 1s;
-      /* 設定子元素在 3D 空間內 */
-      transform-style: preserve-3d;
-    }
-
-    .card-front {
-      width: 100%;
-      height: 100%;
-      background-image: url('./images/totoro1.jpg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      position: absolute;
-      /* 設定隱藏背面 */
-      backface-visibility: hidden;
-    }
-
-    .card-back {
-      width: 100%;
-      height: 100%;
-      background-image: url('./images/totoro_back.jpg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      position: absolute;
-      transform: rotateY(180deg);
-      /* 設定隱藏背面 */
-      backface-visibility: hidden;
-    }
-
-    .card-close {
-      transform: rotateY(180deg);
-    }
-
-    p:not(#text-theme, #text-title) {
-      width: 20%;
-      font-size: 20px;
-      line-height: 50px;
-      margin: 0 100px 0 0;
-      text-align: right;
-      font-size: 1.5rem;
-      float: right;
-      color: #fff;
-    }
-
-    p:first-child:not(#text-theme, #text-title) {
-      float: left;
-      text-align: left;
-      margin: 0 0 0 100px;
-    }
-
-    /* 開始鍵 */
-    #btnStart {
-      padding: 0.5rem;
-      border-radius: 10px;
-      font-size: 1.5rem;
-      background: #333;
-      color: #fff;
-      position: absolute;
-      left: 50%;
-      top: 90%;
-      transform: translate(-50%, -50%);
-    }
-
-    #btnStart:hover {
-      background: #999;
-      color: #000;
-    }
-
-    .radio {
-      display: none;
-    }
-
-    #bg {
-      width: 100%;
-      position: absolute;
-      text-align: center;
-      margin: 0 auto 0;
-      font-size: 1.5rem;
-      line-height: 2rem;
-    }
-
-    #text-title {
-      color: #fff;
-      margin: 20px 0;
-      font-size: 2.5rem;
-    }
-
-    #text-theme {
-      color: #fff;
-      margin: 0;
-    }
-
-    input:hover,
-    label:hover {
-      cursor: pointer;
-    }
-
-    #bg img {
-      width: 230px;
-      height: 80px;
-      margin: 10px;
-    }
-
-    #bg img:hover {
-      box-shadow: 0 0 10px #eee;
-    }
-  </style>
 </head>
 
 <body>
   <div id="area">
     <p>第 <span id="text-level"></span> 關</p>
     <p>倒數 <span id="text-time"></span> 秒</p>
-    <input type="button" id="btnStart" value="START">
+    <div id="btnStart">START</div>
+    <div id="index">回首頁</div>
+    <!-- 實時狀況 -->
+    <div id="instant"></div>
+    <div id="lookMe">LOOK ME </div>
+    <div id="info">
+      ▲ 遊戲說明 ▲<br>
+      <br>
+      可以選擇喜歡的主題作為卡牌花色<br><br>
+      玩家依序翻牌，翻開兩張圖案相同時配對成功，不同則可取得繼續翻牌的機會，時間內配對完成進入下一關。<br>
+      <br>
+      ▽ LEVEL 1 → 15 秒 &nbsp;&nbsp;&nbsp;8 張卡牌<br>
+      ▽ LEVEL 2 → 25 秒&nbsp; 12 張卡牌<br>
+      ▽ LEVEL 3 → 35 秒&nbsp; 16 張卡牌<br>
+      ▽ LEVEL 4 → 45 秒&nbsp; 20 張卡牌<br>
+      ▽ LEVEL 5 → 60 秒&nbsp; 24 張卡牌<br>
+      <br>
+      ▲ 計分方式 ▲<br>
+      <br>
+      以 累計每關花費的時間 做為分數，在相同 LEVEL 花費最少的時間<br>
+      就能成為贏家，一起來挑戰吧！<br>
+      <div id="btnClose">OK</div>
+    </div>
 
     <div id="bg">
-      <p id="text-title">翻牌GAME</p>
-      <p id="text-theme">~ 卡牌主題 ~</p>
+      <!-- 卡牌主題 -->
+      <p id="text-theme" style="margin: 0;"><img src="./images/title.png" id="title" style="width:60%"></p>
       <input type="radio" class="radio" id="totoro" value="totoro" name="bgchange">
       <input type="radio" class="radio" id="baron" value="baron" name="bgchange">
       <input type="radio" class="radio" id="howl" value="howl" name="bgchange">
@@ -188,7 +53,6 @@
       <label for="sky"><img src="./images/theme_sky.jpg"></label>
       <label for="porco"><img src="./images/theme_porco.jpg"></label>
       <label for="kazetachinu"><img src="./images/theme_kazetachinu.jpg"></label>
-
     </div>
     <!-- 卡牌召喚 -->
     <div id="game"></div>
@@ -201,6 +65,7 @@
   <script>
     // 卡片主題
     let theme = ''
+    // 計時器
     let timer = 0
     // 等級
     let level = 1
@@ -209,17 +74,23 @@
     // 倒數計時
     let countdown = 15
     // 儲存最高紀錄
-    const hightime = localStorage.cardgame ? JSON.parse(localStorage.cardgame) : { name: 'best', level: 1, time: 0 }
-    localStorage.cardgame = JSON.stringify(hightime)
     $('#text-level').text(level)
     $('p:not(#text-theme,#text-title)').hide()
+    const hightime = localStorage.cardgame ? JSON.parse(localStorage.cardgame) : { name: 'best', level: 1, time: 0 }
+    localStorage.cardgame = JSON.stringify(hightime)
+    // 打開 / 關閉遊戲說明
+    $('#lookMe').click(function () {
+      $('#info').css({ 'z-index': 2, 'opacity': 1 })
+    })
+    $('#btnClose').click(function () {
+      $('#info').css({ 'z-index': -1, 'opacity': 0 })
+    })
 
     // 預設選定主題
     $(function (e) {
       $('.radio').eq(0).attr('checked', true)
       $('label').eq(0).find('img').css('box-shadow', '0 0 10px #eee')
       theme = $('.radio:checked').val()
-      // $('body').css('background-image', ` url('./images/${theme}.jpg')`)
     })
     // 換卡片主題
     $('.radio').on('click', function (e) {
@@ -228,9 +99,8 @@
       $('label').find('img').css('box-shadow', '')
       $('label').eq($('.radio').index(this)).find('img').css('box-shadow', '0 0 10px #eee')
     })
-
+    // 用迴圈產生卡片
     function cardChange() {
-      // 用迴圈產生卡片
       for (let i = 0; i < (4 + level * 4); i++) {
         $('#game').append(`
         <div class="card card-close">
@@ -244,6 +114,7 @@
         const num = i % ($('.card').length / 2) + 1
         $('.card-back').eq(i).css('background-image', ` url('./images/${theme}_back.jpg')`)
         $('.card').eq(i).find('.card-front').css('background-image', `url('./images/${theme + num}.jpg')`)
+        // 用來判斷卡片是否相同
         $('.card').eq(i).attr('data-num', num)
 
         // 打散卡片
@@ -261,18 +132,28 @@
       $('.card').removeClass('card-ok')
       $('.card, .card-colse').remove()
     }
-
-    // 當按下開始鍵
-    $('#btnStart').click(function () {
+    // 按下回首頁 or 結束遊戲
+    $('#index').click(function () {
+      $('#area').animate({ 'width': '600px', 'height': '550px' })
       $(this).hide()
-      $('#area').animate({
-        width: '800px',
-        height: '600px'
-      })
-      // 主題按鈕消失
-      $('#bg').css('display', 'none')
-      $('p:not(#text-theme, #text-title)').show()
-      $('#area').css('background', 'rgba(153, 153, 153, 0.4)')
+      $('#bg, #lookMe').show()
+      $('p:not(#text-theme), #instant').hide()
+      $('#btnStart').text('START').animate({ 'top': '90%', 'left': '50%', 'display': 'block' })
+      level = 1
+      coubtup = 0
+      countdown = 15
+      $('#text-level').text(level)
+      $('#text-time').text(countdown)
+    })
+
+    // 按下開始
+    $('#btnStart').click(function () {
+      // 主題按鈕 回首頁 消失
+      $('#index, #bg, #lookMe, #instant').hide()
+      $(this).hide()
+      $('#area').animate({ 'width': '800px', 'height': '600px' })
+      if ($(this).text() === '再來一局') $('#game').css('width', '500px')
+      $('p:not(#text-theme)').show()
       // 呼叫洗牌
       cardChange()
 
@@ -293,7 +174,6 @@
             (level === hightime.level && countup < hightime.time)) {
             Swal.fire({
               icon: 'info',
-
               title: '最高分！留下你的大名吧！',
               html: `累計時間為 ${countup} 秒`,
               inputPlaceholder: '輸入名稱',
@@ -307,14 +187,31 @@
               hightime.level = level
               hightime.time = countup
               localStorage.cardgame = JSON.stringify(hightime)
+              $('#instant').show().html(`- 最高紀錄 - <br>${hightime.name} / LEVEL ${hightime.level} / ${hightime.time} 秒`)
+              level = 1
+              countup = 0
+              countdown = 15
+              $('#text-level').text(level)
+              $('#text-time').text(countdown)
             })
           } else {
             Swal.fire({
               icon: 'success',
               title: 'Time is up！',
               html: `遊戲結束QAQ<br>累計時間為 ${countup} 秒`,
+            }).then(result => {
+              level = 1
+              countup = 0
+              countdown = 15
+              $('#text-level').text(level)
+              $('#text-time').text(countdown)
+              $('#instant').show().html(`- 最高紀錄 - <br>${hightime.name} / LEVEL ${hightime.level} / ${hightime.time} 秒`)
             })
           }
+          $('p:not(#text-theme)').hide()
+          $('#area').animate({ 'width': '500px', 'height': '300px' })
+          $('#btnStart').text('再來一局').css({ 'top': '75%', 'left': '30%', 'display': 'block' })
+          $('#index').text('回首頁').css({ 'top': '75%', 'left': '70%', 'display': 'block' })
         }
       }, 1000)
     })
@@ -346,6 +243,9 @@
           if ($('.card-ok').length === $('.card').length) {
             // 結束本回合
             clearInterval(timer)
+            $('p:not(#text-theme)').hide()
+            $('#area').animate({ 'width': '500px', 'height': '300px' })
+
             Swal.fire({
               icon: 'success',
               title: 'Congratulations',
@@ -360,19 +260,29 @@
               }
             }).then(result => {
               cardempty()
-
-              $('#btnStart').css({ 'top': '55%', 'display': 'block' })
+              $('#btnStart').text('NEXT').css({ 'top': '75%', 'left': '35%', 'display': 'block' })
+              $('#index').text('OVER').css({ 'top': '75%', 'left': '65%', 'display': 'block' })
               level++
+              // 各關卡秒數設定
               switch (level) {
                 case 2: countdown = 25
+                  $('#instant').show().html(`- NEXT - <br>LEVEL 2 <br> 25 秒 / 12 張卡牌`)
                   break
                 case 3: countdown = 35
+                  $('#instant').show().html(`- NEXT - <br>LEVEL 3 <br> 35 秒 / 16 張卡牌`)
                   break
                 case 4: countdown = 45
-                  break
-                case 5:
-                  countdown = 60
                   $('#game').css('width', '600px')
+                  $('#instant').show().html(`- NEXT - <br>LEVEL 4 <br> 45 秒 / 20 張卡牌`)
+                  break
+                case 5: countdown = 60
+                  $('#game').css('width', '750px')
+                  $('#instant').show().html(`- NEXT - <br>LEVEL 5 <br> 60 秒 / 24 張卡牌`)
+                  break
+                case 6:
+                  $('#instant').show().html(`太厲害了吧！<br>翻牌高手就是你！`)
+                  $('#btnStart').text('再來一局').css({ 'top': '75%', 'left': '35%', 'display': 'block' })
+                  $('#index').text('回首頁').css({ 'top': '75%', 'left': '65%', 'display': 'block' })
                   break
               }
               $('#text-level').text(level)
